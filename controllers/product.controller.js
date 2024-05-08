@@ -43,6 +43,13 @@ exports.update = asyncHandler(async (req, res, next) => {
 })
 
 exports.delete = asyncHandler(async (req, res, next) => {
+    const product = await Product.findOne({ where: { id: req.params.id } });
+    if(!product) {
+        const err = new Error(`Record not found for ${req.originalUrl}`);
+        err.statusCode = 404;
+        return next(err);
+    }
+    
     await Product.destroy({ where: { id: req.params.id } });
     const statusCode = 200;
     res.status(statusCode).json({ statusCode, message: 'Product deleted successfull.' });
