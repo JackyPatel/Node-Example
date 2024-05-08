@@ -2,10 +2,10 @@ const jwt = require("jsonwebtoken");
 const { jwtKey } = process.env;
 
 module.exports = (req, res, next) => {
-    const token = req.headers?.authorization;
+    const token = req.headers?.authorization || "";
     if(!token) {
         const err = new Error(`Unauthorized Access!`);
-        err.statusCode = 403;
+        err.statusCode = 401;
         return next(err);
     }
     var newToken = token.toString().replaceAll("Bearer ", "");
